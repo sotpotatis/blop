@@ -1,6 +1,6 @@
 [Unit]
 Description=Runs the Superbrain Telnet service
 [Service]
-ExecStart=/srv/run_superbrain.sh
+ExecStart=/srv/blop/web_server/run_superbrain.sh
 [Install]
 RequiredBy=multi-user.target

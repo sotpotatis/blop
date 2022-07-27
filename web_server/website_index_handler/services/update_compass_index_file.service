@@ -3,6 +3,6 @@ Description=Updates the compass website index HTML files
 Wants=update_compass_index.timer
 [Service]
 Type=oneshot
-ExecStart=/srv/blop/website_index_handler/services/update_compass_index_file.sh
+ExecStart=/srv/blop/web_server/website_index_handler/services/update_compass_index_file.sh
 [Install]
 RequiredBy=multi-user.target

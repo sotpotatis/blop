@@ -1,6 +1,6 @@
 [Unit]
 Description=Runs the Compass server.
 [Service]
-ExecStart=/srv/blop/website_index_handler/services/run_compass_server.sh
+ExecStart=/srv/blop/web_server/website_index_handler/services/run_compass_server.sh
 [Install]
 WantedBy=multi-user.target
