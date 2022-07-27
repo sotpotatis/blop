@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form posting results</title>
+</head>
+<body>
+<p>Results from posting form:</p>
+% for item in form_data:
+<p><b>{{item[0]}}:</b> {{item[1]}}</p>
+% end
+</body>
+</html>

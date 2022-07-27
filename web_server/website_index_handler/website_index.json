@@ -1,0 +1,36 @@
+{
+ "websites": {
+  "https://example.com": {
+   "url": "https://example.com",
+   "token": "b49d135d939aaaaa",
+   "updated_at": "2022-07-15 20:18:37.255399",
+   "title": "Example website"
+  },
+  "https://albins.website": {
+   "url": "https://albins.website",
+   "token": "a410a55c1dbcab16",
+   "updated_at": "2022-07-11 21:11:06.405400"
+  },
+  "http://localhost:5000": {
+   "url": "http://localhost:5000",
+   "token": "d87ac8fdbb0bbce3",
+   "title": "New updated title",
+   "description": "Fresh!",
+   "updated_at": "2022-07-27 19:38:23.773317"
+  },
+  "http://localhost:8200": {
+   "url": "http://localhost:8200",
+   "token": "d87ac8fdbb0bbcadade3",
+   "title": "Website form test",
+   "description": "Test website forms!",
+   "updated_at": "2022-07-24 18:51:40.671735"
+  },
+  "https://example.albins.website": {
+   "url": "https://example.albins.website",
+   "token": "959710fb61bff3ca",
+   "title": "Test",
+   "description": "Testing CLI",
+   "updated_at": "2022-07-27 20:26:22.511848"
+  }
+ }
+}

@@ -1,0 +1,8 @@
+[Unit]
+Description=Updates the Compass index file, by default every 5 minutes.
+Requires=update_compass_index.service
+[Timer]
+Unit=update_compass_index.service
+OnCalendar=*:0/5
+[Install]
+WantedBy=multi-user.target

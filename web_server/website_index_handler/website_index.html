@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+<title>Website index</title>
+</head>
+<body>
+<p style="color: blue">Welcome to blop!</p>
+<p>blop is a browsable website collection - in your terminal!</p>
+<p style="color: red">======= Before you begin =======</p>
+<p style="color: green">Is this page looking funky? Resize your terminal window!</p>
+<p style="color: red">WEBSITES LISTED ARE THIRD-PARTY. This is like the "real" web. It can be dangerous!</p>
+<p><b>Navigate pages using arrow keys. Fill input boxes by typing.</b></p>
+<p style="color: green">======= WEBSITES =======</p>
+<p>(scroll using arrow keys + enter)</p>
+{# Set some things used for setting a random color of the website index #}
+{%  set colors = ["red", "blue", "green", "yellow"] %}
+{% set last_color_index = colors|length - 1 %}
+{# Add titles and description if set. Walk in the way that user-configurable (but optional) parameters comes first #}
+{%- for website in websites %}
+{% set color = colors[range(0,last_color_index) | random] %} {# Set a color #}
+{% set color_style = "color: " + color %}
+{% if "title" in website -%}
+<p style="{{ color_style }}">{{ website.title }}</p>
+{%- elif "website_title" in website-%}
+<p style="{{ color_style }}">{{ website.website_title }}</p>
+{%- else -%}}
+<p style="{{ color_style }}">{{ website.url }}</p>
+{%- endif -%}
+{% if "description" in website %}
+<p style="{{ color_style }}">{{ website.description }}</p>
+{%- endif %}
+<button style="{{ color_style }}" data-link="{{ website.url }}">{% if website.title %}{{ website.title }}{% else %}{{ website.url }}{% endif %}</button>
+<hr style="width: 75%;{{ color_style }}">
+{%- endfor %}
+</body>
+</html>

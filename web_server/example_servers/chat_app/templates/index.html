@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messaging app</title>
+</head>
+<body>
+<p>Welcome!</p>
+<p>Please choose which channel you want to create a message in.</p>
+<p style="color: blue;">Use the arrow keys to navigate between channels. Hit enter to select one.</p>
+{% for channel_id in channel_ids %}
+{% set channel_url = base_path + "/" + channel_id + "/messages" %}
+<button data-link="{{ channel_url }}" onclick="location.href='{{ channel_url }}'">#{{ channel_id }}</button>
+{% endfor %}
+</body>
+</html>

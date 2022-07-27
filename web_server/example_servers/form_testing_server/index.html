@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form test page</title>
+</head>
+<body>
+<p>---INFORMATION---</p>
+<p>Type some text below and then click on enter to send it.</p>
+<form action="http://localhost:8200" method="POST" data-send-from-terminal="true">
+    <label for="text_1">Input text here:</label>
+    <input id="text_1" name="text" type="text" data-include-in-payload="true"/>
+    <label for="text_2">...and more text here:</label>
+    <input id="text_2" name="more_text" type="text" data-include-in-payload="true"/>
+    <label for="text_3">...and even more text here:</label>
+    <input id="text_3" name="even_more_text" type="text" data-include-in-payload="true"/>
+    <button type="submit">Send!</button>
+</form>
+</body>
+</html>

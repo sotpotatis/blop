@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>#{{ channel_id }} |  Messages</title>
+</head>
+<body>
+<p style="color: blue;">Messages for #{{ channel_id }}</p>
+<p>(Most recent messages first)</p>
+<form action="{{ base_path }}/{{ channel_id }}/new_message" method="post" data-send-from-terminal="true">
+    <label for="message">Send a message:</label>
+    <input id="message" type="text" data-include-in-payload="true">
+    <button type="submit">Send!</button>
+</form>
+<p><span style="color: red;">Note:</span> You have to hit enter to load any new messages.</p>
+{% for message in messages %}
+<p>{{ message.content }} - sent {{ message.sent_at }}</p>
+<hr>
+{% endfor -%}
+{% if messages|length == 0 -%}
+<p>No messages in this channel yet.</p>
+{% endif %}
+</body>
+</html>
