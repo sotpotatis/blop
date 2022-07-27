@@ -5,8 +5,8 @@ a terminal interface.
 import logging
 from bs4 import BeautifulSoup
 from .exceptions import *
-from web_server.content_renderer.screen.element import Row, Column
-from web_server.content_renderer.screen.scene import Scene
+from ..screen.element import Row, Column
+from ..screen.scene import Scene
 from .const import DEFAULT_SCREEN_WIDTH
 from .converters import TAGS_LINE_BREAKS_AFTER, TAGS_LINE_BREAKS_BEFORE, parse_tag, parse_tags_in, \
 HAS_INVIDIDUAL_PARSERS

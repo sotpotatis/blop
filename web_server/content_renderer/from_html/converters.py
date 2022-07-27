@@ -1,7 +1,8 @@
-import cssutils, logging
-from web_server.content_renderer.screen.interactive_elements import TextBox, Button
-from web_server.const import HTML_COLOR_TO_TERMINAL_COLOR, TERMINAL_COLORS, TERMINAL_COLORS_BACKGROUND, TERMINAL_FONT_WEIGHT
-from web_server.content_renderer.screen.scene import Event
+import cssutils, logging, sys
+from ..screen.interactive_elements import TextBox, Button
+sys.path.append("...")
+from const import HTML_COLOR_TO_TERMINAL_COLOR, TERMINAL_COLORS, TERMINAL_COLORS_BACKGROUND, TERMINAL_FONT_WEIGHT
+from ..screen.scene import Event
 from .const import DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT
 from bs4 import Tag
 from typing import List

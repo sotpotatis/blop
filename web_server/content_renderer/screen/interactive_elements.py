@@ -1,8 +1,9 @@
-'''interactive_elements
+'''interactive_elements.py
 Interactive column elements for placing into a column.'''
-import string, logging, time
-from web_server.const import TERMINAL_COLORS, KEY_ENTER
-from web_server.content_renderer.screen.event import Event
+import string, logging, sys
+sys.path.append("...")
+from const import TERMINAL_COLORS, KEY_ENTER
+from .event import Event
 
 
 class InteractiveElement:

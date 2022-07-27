@@ -1,4 +1,4 @@
-from web_server.content_renderer.screen.element import Column, Row, Justify
+from .content_renderer.screen.element import Column, Row, Justify
 
 #Test: Create a row
 row = Row(

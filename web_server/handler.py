@@ -1,6 +1,7 @@
-import socketserver, logging, socket, os
+import socketserver, logging, socket, sys
 from content_renderer.from_html.format_translator import Translator
-from web_server.const import *
+sys.path.append(".")
+from const import *
 from content_renderer.from_html.sourceloader import SourceLoader
 
 

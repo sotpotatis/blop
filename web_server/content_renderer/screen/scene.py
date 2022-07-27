@@ -1,15 +1,10 @@
-import logging
-import math
-import re
-
-import requests
-
-from web_server.content_renderer.screen.element import Row
+import logging, requests, math, re, sys
+from .element import Row
 from typing import List
-from web_server.content_renderer.screen.interactive_elements import InteractiveElement
-from web_server.const import NAVIGATE, ARROW_KEY_CODES, ARROW_KEYS_REVERSED, ARROW_KEYS_LEFT_RIGHT, TERMINAL_COLORS
-from web_server.content_renderer.screen.event import Event
-from http import HTTPStatus
+from .interactive_elements import InteractiveElement
+sys.path.append("...")
+from const import NAVIGATE, ARROW_KEY_CODES, ARROW_KEYS_REVERSED, ARROW_KEYS_LEFT_RIGHT, TERMINAL_COLORS
+from .event import Event
 class Cursor:
     '''Represents a cursor on the screen. Default position is top right.'''
     def __init__(self, position_x=0, position_y=0, max_x=80, max_y=24):
