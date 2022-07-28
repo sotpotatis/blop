@@ -1,3 +1,4 @@
+import logging
 import os
 #Some key codes for easier handling
 KEY_LEFT = "\x1b[D"
@@ -91,6 +92,16 @@ HTML_COLOR_TO_TERMINAL_COLOR = {
     "cyan": TERMINAL_COLORS.CYAN,
     "white": TERMINAL_COLORS.WHITE
 }
+
+#Some mappings for logging levels
+LOGGING_LEVEL_STR_TO_LEVEL = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+    "critical": logging.CRITICAL
+}
+
 #Directories
 WORKING_DIRECTORY = os.getcwd() #Working directory
 SERVER_DIRECTORY = os.path.dirname(os.path.realpath(__file__)) #Directory that the server is placed in

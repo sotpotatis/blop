@@ -1,8 +1,13 @@
 import socketserver, logging, os
-from const import SUPERBRAIN_LOGO_ASCII
+from const import SUPERBRAIN_LOGO_ASCII, LOGGING_LEVEL_STR_TO_LEVEL
 from handler import RequestHandler
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+#Determine global logging level
+if not os.getenv("SUPERBRAIN_LOG_LEVEL") in LOGGING_LEVEL_STR_TO_LEVEL:
+    logging_level = logging.DEBUG
+else:
+    logging_level = LOGGING_LEVEL_STR_TO_LEVEL[os.getenv("SUPERBRAIN_LOG_LEVEL")]
+logging.basicConfig(level=logging_level)
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     '''Threaded server using documentation from https://docs.python.org/3/library/socketserver.html'''

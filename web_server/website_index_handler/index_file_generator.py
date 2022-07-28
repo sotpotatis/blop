@@ -6,7 +6,6 @@ from shared_helpers import WEBSITE_INDEX_TEMPLATE_FILEPATH_OUT, SERVER_DIRECTORY
 from jinja2 import FileSystemLoader, Environment
 import logging, datetime
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 logger.info("Starting the index file generator...")
 #Read website index
 website_index = get_website_index_file()

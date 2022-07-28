@@ -8,7 +8,6 @@ from content_renderer.from_html.sourceloader import SourceLoader
 class RequestHandler(socketserver.StreamRequestHandler):
     '''Handles a request that has been received by a client'''
     logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.DEBUG)
     translator = Translator()
     source_loader = SourceLoader(
         load_from_files=True,
