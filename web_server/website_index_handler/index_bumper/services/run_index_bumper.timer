@@ -1,0 +1,8 @@
+[Unit]
+Description=Bumps a selected website in the blop website index
+Requires=run_index_bumper.timer
+[Timer]
+Unit=run_index_bumper.service
+OnCalendar=00/1
+[Install]
+RequiredBy=multi-user.target

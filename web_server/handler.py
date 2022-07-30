@@ -1,5 +1,9 @@
 import socketserver, logging, socket, sys
+
+import chardet
+
 from content_renderer.from_html.format_translator import Translator
+from charset_normalizer import from_bytes
 sys.path.append(".")
 from const import *
 from content_renderer.from_html.sourceloader import SourceLoader
@@ -64,8 +68,9 @@ class RequestHandler(socketserver.StreamRequestHandler):
                 self.wfile.writelines(self.scene.get_terminal_lines())
                 #Wait for client input or image change
                 encoded_data = self.rfile.readline().strip()
-                received_data = encoded_data.decode()
-                RequestHandler.logger.info(f"Received data: {received_data} (length {len(received_data)}) (unencoded: {encoded_data}).")
+                data_encoding = chardet.detect(encoded_data)["encoding"]
+                received_data = encoded_data.decode(data_encoding) if data_encoding != None else encoded_data.decode()
+                RequestHandler.logger.info(f"Received data: {received_data} (length {len(received_data)}, encoding: {data_encoding}) (unencoded: {encoded_data}).")
                 if received_data == "":  # Translate to enter key
                     RequestHandler.logger.info("Translated empty data to enter key.")
                     encoded_data = KEY_ENTER
@@ -80,7 +85,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
                    encoded_data = encoded_data.split()
                 for received_key in encoded_data:
                     #Update image according to client input
-                    self.scene.update(received_key)
+                    self.scene.update(received_key, encoding=data_encoding)
             except socket.error:
                 RequestHandler.logger.info("Client disconnected.")
                 break

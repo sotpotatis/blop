@@ -1,6 +1,6 @@
 [Unit]
 Description=Runs the veronica chat app
 [Service]
-ExecStart=/srv/blop/web_server/example_servers/run_veronica.sh
+ExecStart=/srv/blop/web_server/example_servers/chat_app/services/run_veronica.sh
 [Install]
 RequiredBy=multi-user.target

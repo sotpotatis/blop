@@ -5,6 +5,7 @@ from .interactive_elements import InteractiveElement
 sys.path.append("...")
 from const import NAVIGATE, ARROW_KEY_CODES, ARROW_KEYS_REVERSED, ARROW_KEYS_LEFT_RIGHT, TERMINAL_COLORS
 from .event import Event
+from .rendering_helpers import true_length
 class Cursor:
     '''Represents a cursor on the screen. Default position is top right.'''
     def __init__(self, position_x=0, position_y=0, max_x=80, max_y=24):
@@ -145,15 +146,6 @@ class Scene:
         self.logger.debug(f"Generated scrollbar lines: {scrollbar_lines}")
         return scrollbar_lines
 
-    def true_length(self, content):
-        '''Retrieves the true length of content by ignoring special escape characters.
-
-        (Thanks https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python for helping
-        out with this one!)'''
-        ansi_escapes_regex = re.compile("(?:\x1B[@-Z\\-_]|[\x80-\x9A\x9C-\x9F]|(?:\x1B\[|\x9B)[0-?]*[ -/]*[@-~])")
-        filtered_content = ansi_escapes_regex.sub("", content)
-        return len(filtered_content)
-
     def render(self):
         '''Renders the screen to characters.'''
         self.scrollbar_lines = self.get_scrollbar_lines()
@@ -168,8 +160,8 @@ class Scene:
                     final_row += character
                 if len(self.scrollbar_lines)-1 >= row_index: #Add scrollbars if needed
                     scrollbar_line = self.scrollbar_lines[row_index] #Get scrollbar content for this row TODO: Fix colors - scrollbar is being affected by colors of other elements
-                    if self.true_length(final_row)+len(scrollbar_line) < self.width:
-                        final_row += " "*(self.width-len(scrollbar_line)-self.true_length(final_row))
+                    if true_length(final_row)+len(scrollbar_line) < self.width:
+                        final_row += " "*(self.width-len(scrollbar_line)-true_length(final_row))
                     #Add scrollbar line
                     final_row += scrollbar_line
                 all_individual_rows.append(final_row)
@@ -197,10 +189,12 @@ class Scene:
         element.is_active = active
         self.update_element_at(element.parent_row_index, element.parent_column_index, element.element_index, element)
 
-    def update(self, key=None):
+    def update(self, key=None, encoding=None):
         '''Function to update screen content.
 
-        :param key: If not None, only update elements on keypress.'''
+        :param key: If not None, only update elements on keypress.
+
+        :param encoding: The detected encoding of the data if any'''
         self.force_reload = False #Reset force_reload parameter
         #Iterate through everything and find things that has a handler that we should run
         #Arrow keys are reserved by the screen to change which element that is active. So check it
@@ -256,7 +250,15 @@ class Scene:
                     self.logger.debug(f"{key} is arrow key: {key in ARROW_KEY_CODES} ({ARROW_KEY_CODES})")
                     if key is not None and key not in ARROW_KEY_CODES and hasattr(element, "on_keypress"):
                         self.logger.debug(f"Running keypress handler for {element}...")
-                        updated_element_data = element.on_keypress(key)
+                        # Provide a decoded version of the key
+                        if type(key) != str:
+                            if encoding != None:
+                                decoded_key = key.decode(encoding=encoding)
+                            else:
+                                decoded_key = key.decode()
+                        else:
+                            decoded_key = key
+                        updated_element_data = element.on_keypress(key, decoded_key)
                         #Keypress handler might return a list of events. Check that
                         if type(updated_element_data) == tuple:
                             self.logger.debug("Got event data from the handler.")
@@ -278,7 +280,7 @@ class Scene:
                         #Calculate where the element is on the screen and where it should be
                         element_search = str(element).strip("\n").split("\n")[0]
                         raw_element_index = self.current_row_string.find(element_search)
-                        element_index_on_scene = raw_element_index-(len(self.current_row_string)-self.true_length(self.current_row_string)) #Get element index on scene. Subtract length for special color strings etc.
+                        element_index_on_scene = raw_element_index-(len(self.current_row_string)-true_length(self.current_row_string)) #Get element index on scene. Subtract length for special color strings etc.
                         self.logger.debug(f"Element {element_search} has index {element_index_on_scene} in scene string.")
                         if raw_element_index == -1:
                             self.logger.debug(f"Could not find index of {element_search} in scene string! (is probably not scrolled to position)")
@@ -326,8 +328,10 @@ class Scene:
     def get_terminal_lines(self):
         '''Optimizes output for the terminal.'''
         terminal_lines = []
-        for line in self.render().split("\n"):
-            terminal_lines.append((line + "\r\n").encode())
+        rendered_content = self.render()
+        for line in rendered_content.split("\n"):
+            terminal_line = (line + "\r\n").encode()
+            terminal_lines.append(terminal_line)
         return terminal_lines
 
     def get_dial_in_string(self):

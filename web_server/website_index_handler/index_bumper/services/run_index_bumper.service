@@ -1,0 +1,8 @@
+[Unit]
+Description=Bumps a selected website in the blop website index
+Wants=run_index_bumper.timer
+[Service]
+Type=oneshot
+ExecStart=/srv/blop/web_server/website_index_handler/index_bumper/services/run_index_bumper.sh
+[Install]
+RequiredBy=multi-user.target

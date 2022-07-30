@@ -11,8 +11,8 @@ parser.add_argument("--website_token", help="The token that belongs to the speci
 parser.add_argument("--title", help="The website title (optional)", type=str)
 parser.add_argument("--description", help="The website description (optional)", type=str)
 parser.add_argument("--new_website_url", help="If set, a new website URL to change the website in the index to.", type=str)
-parser.add_argument("--website_index_server", help="The server where the compass website index is running.", type=str, default="compass.sweetpotato.online")
-parser.add_argument("--website_bump_threshold", default=3600, help="How often the website can be bumped. If the script is called too often, this value will stop the update.", type=str)
+parser.add_argument("--website_index_server", help="The server where the compass website index is running.", type=str, default="http://compass.sweetpotato.online:1234")
+parser.add_argument("--website_bump_threshold", default=3600, help="How often the website can be bumped. If the script is called too often, this value will stop the update.", type=int)
 
 #Set up logging
 logger = logging.getLogger(__name__)
@@ -57,6 +57,7 @@ def read_json(file):
 
     :param file: The filepath to read data from.'''
     return json.loads(open(file, "r").read())
+
 WEBSITE_BUMP_TRACKING_FILE = os.path.join(os.getcwd(), ".website_bumps.json")
 if not os.path.exists(WEBSITE_BUMP_TRACKING_FILE):
     logger.info("Creating website bump JSON file...")

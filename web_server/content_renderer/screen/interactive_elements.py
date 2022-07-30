@@ -1,11 +1,10 @@
 '''interactive_elements.py
 Interactive column elements for placing into a column.'''
-import string, logging, sys
+import string, logging, sys, re
 sys.path.append("...")
 from const import TERMINAL_COLORS, KEY_ENTER
 from .event import Event
-
-
+from .rendering_helpers import true_length
 class InteractiveElement:
     def __init__(self):
         self.is_active = False
@@ -36,27 +35,28 @@ class TextBox(InteractiveElement):
 
     def __str__(self):
         filled_out_content = self.content
-        if len(filled_out_content) > self.width-2: #Clip content if too much text
-            filled_out_content = filled_out_content[-self.width-2:]
-        elif len(filled_out_content) < self.width-2: #Add spacing
-            filled_out_content = filled_out_content + " "*(self.width-len(filled_out_content)-4)
+        filled_out_content_length = len(filled_out_content.encode())
+        max_content_length = self.width-2
+        if filled_out_content_length > max_content_length: #Clip content if too much text
+            filled_out_content = filled_out_content[-max_content_length:][:max_content_length-1]
+        elif filled_out_content_length < max_content_length: #Add spacing
+            filled_out_content = filled_out_content + " "*(self.width-filled_out_content_length-2)
+        border_character = "." if self.is_active else "-"
         #Render a final textbox
         return f"""{self.color_string}
-        {"-"*(self.width-2)}       
-        {">" if self.is_active else "|"}{filled_out_content}|
-        {"-"*(self.width-2)}
+        {border_character*(max_content_length)}       
+        {">" if self.is_active else "|"}{filled_out_content}{"<" if self.is_active else "|"}
+        {border_character*(max_content_length)}
          {TERMINAL_COLORS.RESET}
         """
 
-    def on_keypress(self, key):
+    def on_keypress(self, key, decoded_key):
         '''Handler for when a key is pressed'''
         #If keypress is a letter key and I am focused, add input to textbox content
         self.logger.debug(f"Handling keypress for textbox (pressed keys: {key})...")
-        if type(key) == bytes: #TODO: This looks hacky, make sure key parameters are persistent
-            key = key.decode()
-        if self.is_active and all(char in string.ascii_letters for char in key):
+        if self.is_active:
             self.logger.debug(f"Adding content to textbox: {key}.")
-            self.content += key
+            self.content += decoded_key
         else:
             self.logger.debug(f"Content will not be added to textbox. (focused: {self.is_active})")
         return self
@@ -85,7 +85,7 @@ class Button(InteractiveElement):
         '''Handler for every time the screen updates'''
         return self
 
-    def on_keypress(self, key):
+    def on_keypress(self, key, decoded_key):
         '''Handles a keypress. If active and if the event key is pressed,
         an event will be dispatched.'''
         self.logger.debug(f"Checking button keypress (active: {self.is_active}).")

@@ -1,7 +1,7 @@
 import cssutils, logging, sys
 from ..screen.interactive_elements import TextBox, Button
 sys.path.append("...")
-from const import HTML_COLOR_TO_TERMINAL_COLOR, TERMINAL_COLORS, TERMINAL_COLORS_BACKGROUND, TERMINAL_FONT_WEIGHT
+from const import HTML_COLOR_TO_TERMINAL_COLOR, HTML_COLOR_TO_TERMINAL_COLOR_BACKGROUND, TERMINAL_COLORS, TERMINAL_COLORS_BACKGROUND, TERMINAL_FONT_WEIGHT
 from ..screen.scene import Event
 from .const import DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT
 from bs4 import Tag
@@ -14,10 +14,30 @@ logger = logging.getLogger(__name__)
 #The converter should then return an object that can be converted into a string.
 
 
-def html_color_to_terminal_color(html_color):
-    #Return mapping
-    if html_color in HTML_COLOR_TO_TERMINAL_COLOR:
-        return HTML_COLOR_TO_TERMINAL_COLOR[html_color]
+def html_color_to_terminal_color(html_color, is_foreground=True, previous=""):
+    '''Converts a HTML color string (like "red", "green", etc.) to
+    a terminal ANSI color code.
+
+    :param html_color: The source HTML color code (for example "red")
+
+    :param is_foreground: True to return a foreground ANSI color code.
+    False to return a background ANSI color code.
+
+    :param previous: Any previous text.'''
+    #Return mapping if exists. If not, return None.
+    color_string = None # String for this time around
+    if is_foreground and html_color in HTML_COLOR_TO_TERMINAL_COLOR:
+        color_string = HTML_COLOR_TO_TERMINAL_COLOR[html_color]
+    elif not is_foreground and html_color in HTML_COLOR_TO_TERMINAL_COLOR_BACKGROUND:
+        color_string = HTML_COLOR_TO_TERMINAL_COLOR_BACKGROUND[html_color]
+    if color_string != None:
+        # Check if we have old colors to combine or not
+        if len(previous) > 0:
+            final = previous.strip("m") + ";" + color_string.strip("\x1b[")
+            return final
+        else:
+            return color_string
+
     else:
         return None
 
@@ -69,8 +89,14 @@ def get_color_string_for(input, style=None):
     if parsed_style != None:
         if "color" in parsed_style:
             logger.debug(f"Converting color string for input {input}...")
-            color_string = html_color_to_terminal_color(parsed_style.color) #Perform conversion
+            color_string = html_color_to_terminal_color(parsed_style.color, previous=final_string) #Perform conversion
             if color_string != None: #None is returned if the color string couldn't be converted
+                final_string += color_string
+        if "background" in parsed_style:
+            logger.debug(f"Converting color background string for input {input}...")
+            # Perform conversion
+            color_string = html_color_to_terminal_color(parsed_style.background, is_foreground=False, previous=final_string)
+            if color_string != None: # None is returned if the color string couldn't be converted
                 final_string += color_string
         if "font-weight" in parsed_style:
             logger.debug(f"Converting font weight for input {input}...")

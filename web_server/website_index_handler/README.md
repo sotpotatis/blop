@@ -15,8 +15,11 @@ to add a site to this directory, we expose an api.
 
 **hosted version base url**
 
-the hosted version is available at `compass.sweetpotato.online`. it controls the
+the hosted version is available at `compass.sweetpotato.online:1234`. it controls the
 index of `blop.sweetpotato.online`.
+
+**please note**: the hosted version is at port `1234` due to me hosting other things on the same server.
+sending a request to port 80 will take you somewhere else!
 
 > **ℹ️ Note:** If you prefer looking at examples instead, see the "example_requests" directory in this folder.
 > Those examples are intended to be imported in [Insomnia](https://insomnia.rest).

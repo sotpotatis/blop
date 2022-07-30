@@ -1,0 +1,5 @@
+CRONTAB EXAMPLE
+Below is a crontab example line to bump a website in the index.
+If you don't want to use systemd, you can use it instead.
+NOTE: The default crontab updates the index 6 hours (4 times a day)
+0 */6 * * * cd /srv/blop/web_server/website_index_handler/index_bumper && python bumper.py "https://example.com" --token="<YOUR_TOKEN_HERE>" --title="Website title" --description="Website description.
